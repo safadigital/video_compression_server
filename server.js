@@ -13,21 +13,11 @@ const fs = require('fs').promises;
 
 const timeout = require('connect-timeout');
 
-// function to de;ete a;; fi;es inside directory
-async function removeRecursively(directory) {
-  await fs.rmdir(directory, { recursive: true });
-}
-
-// Call the function
-// removeRecursively('path/to/directory')
-//   .then(() => console.log('Directory and all its contents have been removed recursively.'))
-//   .catch(console.error);
-
 
 const app = express();
 app.use(timeout('500s'));
 const upload = multer({ dest: 'uploads/' });
-app.post('/upload', upload.single('video'), (req, res) => {
+app.post('/upload', upload.single('video'), async (req, res) => {
 
 // const __filename = fileURLToPath(req.file.url); // get the resolved path to the file
 // const __dirname = path.dirname(__filename); // get the name of the directory
@@ -55,10 +45,6 @@ const compressVideo = (inputPath, outputPath, res) => {
      console.log("INPUT FILE: ", inputFile);
 
      // send file to client
-
-
-
-
 
     //  res.send('Video uploaded and compressed successfully!');
      // return comporessed file to client

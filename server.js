@@ -45,16 +45,52 @@ const compressVideo = (inputPath, outputPath, res) => {
     .size('30%')
     .on('end', () => {
       console.log('Compression completed!');
+      console.log("INput path: ", inputPath);
+      console.log("OUTPUT path: ", outputPath);
+      console.log("Local folder path: ", process.cwd());
+     const inputFile = path.join(process.cwd(), `./${inputPath}`);
+     const outputFile = path.join(process.cwd(), `./uploads/${outputPath}`);
+
+     console.log("OUTPUT FILE: ", outputFile);
+     console.log("INPUT FILE: ", inputFile);
+
+     // send file to client
+
+
+
+
+
     //  res.send('Video uploaded and compressed successfully!');
-      // return comporessed file to client
-      return res.status(200).sendFile(outputPath, function (err) {
+     // return comporessed file to client
+      return res.status(200).sendFile(outputFile, function (err) {
         if (err) {
             console.error('Error sending file:', err);
         } else {
-            console.log('Sent:', outputPath);
+            console.log('Sent:', outputFile);
             // then remove al files 
+            // Remove input file
+fs.unlink(inputFile, (err) => {
+  if (err) {
+    console.error(`Error removing file: ${err}`);
+    return;
+  }
+
+  console.log(`File ${inputFile} has been successfully removed.`);
+});
+
+// Remove the output file
+fs.unlink(outputFile, (err) => {
+  if (err) {
+    console.error(`Error removing file: ${err}`);
+    return;
+  }
+
+  console.log(`File ${outputFile} has been successfully removed.`);
+});
         }
       });
+
+
     })
     .on('error', (err) => {
       console.error('Compression failed:', err);
